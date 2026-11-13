@@ -1,6 +1,6 @@
 ﻿namespace ChessEngine
 {
-    internal class StartPosition()
+    public class StartPosition()
     {
         public static ulong whitePawns = 0x00FF000000000000;
         public static ulong whiteKnights = 0x2400000000000000;
@@ -17,7 +17,7 @@
         public static ulong blackKing = 0x0000000000000010;
     }
 
-    internal class InitializeMoves()
+    internal class Moves()
     {
         public static ulong[] WhitePawnMovesMove = CalcPawns("white", "move");
         public static ulong[] BlackPawnMovesMove = CalcPawns("black", "move");
@@ -31,28 +31,34 @@
 
         private static ulong[] InitializeQueen()
         {
+            ulong[] moves = new ulong[64];
+
             for (int i = 0; i < 64; i++)
             {
-                QueenMoves[i] = BishopMoves[i] | RookMoves[i];
+                moves[i] = BishopMoves[i] | RookMoves[i];
             }
 
-            return QueenMoves;
+            return moves;
         }
 
         private static ulong[] CalcPawns(string color, string direction)
         {
             ulong[] moves = new ulong[64];
 
-            if (direction == "forward")
+            for (int i = 0; i < 64; i++)
             {
-                for (int i = 0; i < 64; i++)
+                if (direction == "move")
+                {
+                    if (color == "white" && i >= 8)
+                        moves[i] = (1UL << i) >> 8;
+
+                    else if (color == "black" && i <= 55)
+                        moves[i] = (1UL << i) << 8;
+                }
+                else
                 {
 
                 }
-            }
-            else
-            {
-
             }
 
             return moves;
